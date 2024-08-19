@@ -16,12 +16,51 @@ body {
 	font-size: 1.4rem;
 	color: #777;
 	line-height: 2;
+	margin-top: 12rem;
 }
 
 h2 {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
 	text-align: center;
+}
+
+h3 {
+	text-align: center;
+	color: skyblue;
+}
+
+button {
+	font-size: 18px;
+	padding: 8px 12px;
+}
+
+p {
+	text-align: center;
+	color: black;
+	font-size: 14px;
+}
+
+span {
+	font-weight: 900;
+	font-size: 34px;
+}
+
+.results-container {
+	height: 32px;
+	padding: 12px;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.round-message {
+	text-align: center;
+	font-size: 18px;
+}
+
+.winMessage {
+	color: goldenrod;
+}
+
+.lostMessage {
+	color: crimson;
 }

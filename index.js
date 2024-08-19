@@ -1,7 +1,52 @@
-console.log('Welcome to RPS game!');
-
 let humanScore = 0;
 let computerScore = 0;
+let round = 0;
+
+const headingEl = document.createElement('h2');
+const buttonsContainer = document.createElement('div');
+const rockBtn = document.createElement('button');
+const paperBtn = document.createElement('button');
+const scissorsBtn = document.createElement('button');
+const roundEl = document.createElement('h3');
+const messageEl = document.createElement('p');
+const resultsContainer = document.createElement('div');
+const humanResultsEl = document.createElement('p');
+const cpuResultsEl = document.createElement('p');
+const roundMessageEl = document.createElement('p');
+
+resultsContainer.classList = 'results-container';
+roundMessageEl.classList = 'round-message';
+buttonsContainer.setAttribute('style', 'padding:16px; display: flex; gap: 16px; width:100%; justify-content: center');
+rockBtn.innerText = 'Rock';
+paperBtn.innerText = 'Paper';
+scissorsBtn.innerText = 'Scissors';
+headingEl.innerText = 'Make a choice';
+
+document.body.appendChild(headingEl);
+document.body.appendChild(buttonsContainer);
+document.body.appendChild(resultsContainer);
+document.body.appendChild(roundMessageEl);
+
+resultsContainer.appendChild(humanResultsEl);
+resultsContainer.appendChild(roundEl);
+resultsContainer.appendChild(cpuResultsEl);
+
+buttonsContainer.appendChild(rockBtn);
+buttonsContainer.appendChild(paperBtn);
+buttonsContainer.appendChild(scissorsBtn);
+
+buttonsContainer.addEventListener('click', (e) => playRound(getHumanChoice(e.target.innerText), getComputedChoice()));
+
+function getHumanChoice(choice) {
+	// get human choice and store in variable
+	const humanChoice = choice;
+	const formattedUserChoice = humanChoice.trim().toLocaleLowerCase();
+
+	// Check if entered valid value and return it  ELSE console error
+	if (formattedUserChoice === 'rock' || formattedUserChoice === 'paper' || formattedUserChoice === 'scissors') {
+		return formattedUserChoice;
+	}
+}
 
 function getComputedChoice() {
 	// initiate var includes data ['rock', 'paper', 'scissors']
@@ -13,74 +58,43 @@ function getComputedChoice() {
 
 	// return computer choice
 	const computerChoice = rpsChoices[randomIndex];
+
 	return computerChoice;
 }
 
-function getHumanChoice() {
-	// get human choice and store in variable
-	const humanChoice = prompt('Please enter your choice: rock, paper or scissors');
-
-	// IF there is no user console.log error message
-	if (humanChoice === null || humanChoice === '') {
-		alert('ERROR! Please enter your choice: Rock, Paper or Scissors.');
-		return;
-	}
-
-	const formattedUserChoice = humanChoice.trim().toLocaleLowerCase();
-
-	// Check if entered valid value and return it  ELSE console error
-	if (formattedUserChoice === 'rock' || formattedUserChoice === 'paper' || formattedUserChoice === 'scissors') {
-		return formattedUserChoice;
-	} else {
-		alert('ERROR! Please enter valid value: Rock, Paper or Scissors.');
-		return;
-	}
+function resetValues() {
+	computerScore = 0;
+	humanScore = 0;
+	round = 0;
+	roundEl.innerText = '';
 }
 
 function playRound(humanChoice, computerChoice) {
-	// IF options are equal console DRAW message, ELSE IF human win increase human score by 1 and console win message
+	++round;
+	roundEl.innerText = `Round number: ${round}`;
 	if (humanChoice === computerChoice) {
-		console.log(`DRAW. Your choice: ${humanChoice} is equal to computer choice: ${computerChoice}`);
+		roundMessageEl.textContent = `DRAW. Your choice ${humanChoice} is equal to computer choice - ${computerChoice}`;
 	} else if (
 		(humanChoice === 'paper' && computerChoice === 'rock') ||
 		(humanChoice === 'rock' && computerChoice === 'scissors') ||
 		(humanChoice === 'scissors' && computerChoice === 'paper')
 	) {
 		humanScore++;
-		console.log(`You WIN round. Your choice - ${humanChoice} beats computer's choice - ${computerChoice}`);
+		roundMessageEl.textContent = `You WIN round. Your choice - ${humanChoice} beats computer's choice - ${computerChoice}`;
 	} else {
 		computerScore++;
-		console.log(`You LOST round. Your choice - ${humanChoice} lost to computer's choice - ${computerChoice}`);
+		roundMessageEl.textContent = `You LOST round. Your choice - ${humanChoice} lost to computer's choice - ${computerChoice}`;
 	}
-	console.log(`Your score: ${humanScore} | Computer score: ${computerScore}`);
+
+	if (humanScore === 5) {
+		roundMessageEl.innerHTML = '<span class=winMessage>YOU WIN!</span>';
+		resetValues();
+	}
+	if (computerScore === 5) {
+		roundMessageEl.innerHTML = '<span class=lostMessage>YOU LOST!</span>';
+		resetValues();
+	}
+
+	humanResultsEl.innerText = `You score: ${humanScore}`;
+	cpuResultsEl.innerText = `Computer score: ${computerScore}`;
 }
-
-function playGame() {
-	for (let i = 0; i < 5; i++) {
-		const humanSelection = getHumanChoice();
-
-		if (humanSelection !== undefined) {
-			const computerSelection = getComputedChoice();
-			console.log(`***** ROUND nr.${i + 1} ****`);
-			playRound(humanSelection, computerSelection);
-			continue;
-		} else {
-			console.log(`***** ROUND nr.${i + 1} ****`);
-			console.log('Invalid user selection. Moving to next round.');
-		}
-	}
-
-	const winMessage = `GAME OVER: You WIN! your total score: ${humanScore}. Computer total score: ${computerScore}`;
-	const lostMessage = `GAME OVER: You LOST. your total score: ${humanScore}. Computer total score: ${computerScore}`;
-	const drawMessage = `GAME OVER: DRAW. Your total score: ${humanScore}. Computer total score: ${computerScore}`;
-
-	if (computerScore === humanScore) {
-		console.log(drawMessage);
-	} else if (humanScore > computerScore) {
-		console.log(winMessage);
-	} else {
-		console.log(lostMessage);
-	}
-}
-
-playGame();
